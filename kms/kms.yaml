@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kms
+  namespace: kms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kms
+  template:
+    metadata:
+      labels:
+        app: kms
+    spec:
+      containers:
+        - name: kms
+          image: mikolatero/vlmcsd:latest
+          ports:
+            - containerPort: 1688
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kms
+  namespace: kms
+  labels:
+    app: kms
+spec:
+  type: NodePort
+  ports:
+    - name: kms
+      port: 1688
+      targetPort: 1688
+  selector:
+    app: kms
